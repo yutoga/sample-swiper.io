@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swiper カルーセル サンプル</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      
+      .swiper {
+        width: 100%;
+        height: 400px;
+      }
+      
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #f8f8f8;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+      }
+      
+      .swiper-slide img {
+        max-width: 80%;
+        max-height: 200px;
+        object-fit: cover;
+      }
+      
+      .swiper-pagination-bullet-active {
+        background-color: #ff6b6b;
+      }
+      
+      .swiper-button-next,
+      .swiper-button-prev {
+        color: #ff6b6b;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Swiperカルーセルのサンプル</h1>
+    
+    <div id="app"></div>
+    
+    <!-- Swiper -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <img src="https://picsum.photos/id/123/600/400" alt="スライド1">
+          <h3>スライド 1</h3>
+          <p>これはSwiperライブラリを使ったサンプルスライドです。</p>
+        </div>
+        <div class="swiper-slide">
+          <img src="https://picsum.photos/id/124/600/400" alt="スライド2">
+          <h3>スライド 2</h3>
+          <p>自動再生、ナビゲーションボタン、ページネーションが有効です。</p>
+        </div>
+        <div class="swiper-slide">
+          <img src="https://picsum.photos/id/125/600/400" alt="スライド3">
+          <h3>スライド 3</h3>
+          <p>スワイプ操作でスライドを切り替えることができます。</p>
+        </div>
+        <div class="swiper-slide">
+          <img src="https://picsum.photos/id/126/600/400" alt="スライド4">
+          <h3>スライド 4</h3>
+          <p>レスポンシブデザインにも対応しています。</p>
+        </div>
+        <div class="swiper-slide">
+          <img src="https://picsum.photos/id/127/600/400" alt="スライド5">
+          <h3>スライド 5</h3>
+          <p>カスタマイズも簡単にできます。</p>
+        </div>
+      </div>      <!-- ナビゲーションボタン -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <!-- ページネーション -->
+      <div class="swiper-pagination"></div>    </div>
+      <!-- 外部ライブラリの読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- Swiper初期化コード（直接埋め込み） -->
+    <script>
+      // CodeSandboxエラー対応
+      window.addEventListener('error', function(e) {
+        if (e.message.includes('manifest.json') || e.message.includes('cache')) {
+          console.log('CodeSandbox関連のエラーを無視:', e.message);
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // アプリコンテンツの追加
+      function addAppContent() {
+        const appElement = document.getElementById("app");
+        if (appElement) {
+          appElement.innerHTML = `
+            <div>
+              <h2>追加コンテンツ</h2>
+              <p>このコンテンツはJavaScriptから追加されました。</p>
+              <p>Swiperライブラリの状態: <span id="swiper-status">確認中...</span></p>
+            </div>
+          `;
+        }
+      }
+
+      // Swiperの初期化（改良版）
+      function initSwiper() {
+        console.log('Swiper初期化を開始...');
+        
+        // アプリコンテンツを先に追加
+        addAppContent();
+        
+        const statusElement = document.getElementById('swiper-status');
+        
+        // Swiperライブラリのチェック（改良版）
+        let checkAttempts = 0;
+        const maxAttempts = 100; // 10秒間試行
+        
+        function checkAndInit() {
+          checkAttempts++;
+          console.log(`Swiperライブラリチェック試行 ${checkAttempts}/${maxAttempts}`);
+          
+          if (typeof Swiper !== 'undefined') {
+            console.log('Swiperライブラリが見つかりました!');
+            
+            if (statusElement) {
+              statusElement.textContent = '読み込み完了';
+              statusElement.style.color = 'green';
+            }
+            
+            try {
+              // Swiperの初期化
+              const swiper = new Swiper(".mySwiper", {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                  delay: 3000,
+                  disableOnInteraction: false,
+                },
+                pagination: {
+                  el: ".swiper-pagination",
+                  clickable: true,
+                },
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+                breakpoints: {
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                  }
+                },
+              });
+              
+              console.log('Swiper initialized successfully:', swiper);
+              
+              if (statusElement) {
+                statusElement.textContent = 'カルーセル初期化完了 ✅';
+                statusElement.style.color = 'blue';
+              }
+              
+            } catch (error) {
+              console.error('Swiper初期化エラー:', error);
+              if (statusElement) {
+                statusElement.textContent = '初期化エラー ❌';
+                statusElement.style.color = 'red';
+              }
+            }
+            return;
+          }
+          
+          if (checkAttempts >= maxAttempts) {
+            console.error('Swiperライブラリの読み込みがタイムアウトしました');
+            if (statusElement) {
+              statusElement.textContent = '読み込みタイムアウト ❌';
+              statusElement.style.color = 'red';
+            }
+            
+            // フォールバック：CDNを変更して再試行
+            console.log('代替CDNを試行します...');
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/swiper@11/swiper-bundle.min.js';
+            script.onload = function() {
+              console.log('代替CDNからの読み込み成功');
+              setTimeout(checkAndInit, 100);
+            };
+            script.onerror = function() {
+              console.error('代替CDNも失敗しました');
+              if (statusElement) {
+                statusElement.textContent = 'すべてのCDNが失敗 ❌';
+                statusElement.style.color = 'red';
+              }
+            };
+            document.head.appendChild(script);
+            return;
+          }
+          
+          if (statusElement) {
+            statusElement.textContent = `ライブラリ読み込み待機中... (${checkAttempts}/${maxAttempts})`;
+          }
+          
+          setTimeout(checkAndInit, 100);
+        }
+        
+        // 初回チェック開始
+        setTimeout(checkAndInit, 100);
+      }
+
+      // DOMが読み込まれたら初期化開始
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSwiper);
+      } else {
+        // DOMが既に読み込まれている場合
+        initSwiper();
+      }
+    </script>
+  </body>
+</html>
